@@ -4,7 +4,7 @@ networks:
         driver: bridge
 services:
     app:
-        container_name: tecksolucoes-gestaocartao-validation-v1-app
+        container_name: nome-do-seu-servico-app
         build:
             context: .
             dockerfile: ./docker/Dockerfile
