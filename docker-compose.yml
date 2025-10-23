@@ -1,0 +1,47 @@
+networks:
+    application:
+        name: application
+        driver: bridge
+services:
+    app:
+        container_name: tecksolucoes-gestaocartao-validation-v1-app
+        build:
+            context: .
+            dockerfile: ./docker/Dockerfile
+            args:
+                PHP_VERSION: 8.3-fpm-bullseye
+                HOST_UID: "${UID:-1000}"
+                HOST_GID: "${GID:-1000}"
+            target: app
+        environment:
+            - XDG_CONFIG_HOME=/var/www/app/storage
+        volumes:
+            - './:/var/www/app'
+            - /var/www/app/vendor
+            - /var/www/app/node_modules
+        ports:
+          - "80:80"
+          - "5173:5173"
+
+        networks:
+            - application
+        depends_on:
+            - redis
+    redis:
+        image: 'redis:alpine'
+        ports:
+            - '${FORWARD_REDIS_PORT:-6379}:6379'
+        volumes:
+            - 'redis:/data'
+        networks:
+            - application
+        healthcheck:
+            test:
+                - CMD
+                - redis-cli
+                - ping
+            retries: 3
+            timeout: 5s
+volumes:
+    redis:
+        driver: local
