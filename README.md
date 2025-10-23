@@ -132,12 +132,3 @@ Contribuições são bem-vindas. Para contribuir:
 Este projeto usa a licença MIT (verifique a raiz do projeto para o arquivo LICENSE).
 
 ---
-
-Se quiser, posso também:
-
-- Adicionar uma seção `Developing` com exemplos de endpoints e payloads;
-- Gerar um arquivo `docs/` com um exemplo OpenAPI básico;
-- Incluir um checklist de PR e template para issues.
-
-Diga qual dessas opções você prefere que eu implemente a seguir.
-   
