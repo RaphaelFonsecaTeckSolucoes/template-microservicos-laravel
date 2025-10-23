@@ -1,61 +1,143 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# Template de Microsserviços — Laravel
 
-## About Laravel
+Uma base para construir microsserviços com Laravel, orientada a APIs e pronta para uso com Docker.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Principais versões
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- PHP: ^8.2
+- Laravel: ^12.0
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Sumário
 
-## Learning Laravel
+- Sobre
+- Requisitos
+- Inicialização rápida (Docker)
+- Comandos úteis
+- Estrutura do projeto
+- Boas práticas e sugestões
+- Contribuição
+- Licença
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Sobre
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Este repositório fornece um template inicial para microsserviços usando Laravel. O foco é simplificar o setup local (via Docker) e fornecer uma estrutura clara para APIs.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Requisitos
 
-## Laravel Sponsors
+- Docker & docker-compose
+- PHP >= 8.2 (quando executar localmente sem Docker)
+- Composer (geralmente executado dentro do container)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Inicialização rápida (Docker)
 
-### Premium Partners
+1. Subir e construir containers (constrói a imagem e instala dependências):
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+```bash
+docker-compose up -d --build
+```
 
-## Contributing
+2. Criar arquivo de ambiente e gerar chave da aplicação:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+docker-compose exec app cp .env.example .env
+docker-compose exec app php artisan key:generate
+```
 
-## Code of Conduct
+3. (Opcional) Instalar dependências manualmente no container:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+docker-compose exec app composer install
+```
 
-## Security Vulnerabilities
+Depois disso, a aplicação estará acessível em http://localhost (verifique as portas no `docker-compose.yml`).
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Variáveis de ambiente
 
-## License
+Copie `.env.example` para `.env` e ajuste valores conforme necessário (banco, fila, serviços externos). Valores comuns a verificar:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- APP_ENV
+- APP_DEBUG
+- DB_CONNECTION, DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, DB_PASSWORD
+- QUEUE_CONNECTION
+
+## Comandos úteis
+
+- Rodar migrações:
+
+```bash
+docker-compose exec app php artisan migrate
+```
+
+- Rodar testes (PHPUnit/Laravel):
+
+```bash
+docker-compose exec app php artisan test
+```
+
+- Limpar caches e otimizar:
+
+```bash
+docker-compose exec app php artisan optimize:clear
+```
+
+- Acessar shell do container:
+
+```bash
+docker-compose exec app bash
+```
+
+- Rodar seeders:
+
+```bash
+docker-compose exec app php artisan db:seed
+```
+
+- Rodar migrations reset (aviso: apaga dados):
+
+```bash
+docker-compose exec app php artisan migrate:fresh --seed
+```
+
+## Estrutura do projeto (visão rápida)
+
+- `app/` — Modelos, Controladores, Providers
+- `bootstrap/` — Inicialização do framework
+- `config/` — Arquivos de configuração
+- `database/` — Migrations, seeders e factories
+- `public/` — Front controller e assets
+- `routes/` — Definições de rotas (`api.php`)
+- `storage/` — Logs, cache, uploads
+- `tests/` — Testes automatizados
+
+Veja o repositório para mais detalhes e adaptações específicas para microsserviços.
+
+## Boas práticas e sugestões
+
+- Mantenha as variáveis sensíveis fora do controle de versão (`.env`).
+- Use migrations e seeders para reproduzir ambiente de desenvolvimento.
+- Documente endpoints principais em um arquivo separado (por exemplo, `docs/` ou Swagger/OpenAPI).
+- Considere um pipeline CI que rode linter, testes e análise estática.
+
+## Contribuições
+
+Contribuições são bem-vindas. Para contribuir:
+
+1. Fork o repositório
+2. Crie uma branch com sua feature/bugfix
+3. Abra um Pull Request descrevendo as mudanças
+
+## Licença
+
+Este projeto usa a licença MIT (verifique a raiz do projeto para o arquivo LICENSE).
+
+---
+
+Se quiser, posso também:
+
+- Adicionar uma seção `Developing` com exemplos de endpoints e payloads;
+- Gerar um arquivo `docs/` com um exemplo OpenAPI básico;
+- Incluir um checklist de PR e template para issues.
+
+Diga qual dessas opções você prefere que eu implemente a seguir.
+   
