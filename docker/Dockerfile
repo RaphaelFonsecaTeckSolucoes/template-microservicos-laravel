@@ -62,16 +62,11 @@ FROM base AS app
 
 WORKDIR $APP_DIR
 
-COPY composer.json ./
-
-# Instale as dependências.
-RUN composer install --no-interaction --no-scripts --no-autoloader -vvv
-
 # Copie o resto dos arquivos
 COPY . .
 
-# Gere o autoloader otimizado do Composer.
-RUN composer dump-autoload --optimize
+# Instale as dependências.
+RUN composer install --no-interaction --optimize-autoloader
 
 # Instalação do Nginx
 RUN apt-get install nginx -y \
@@ -93,4 +88,5 @@ RUN chmod +x /entrypoint.sh
 RUN echo "umask 0000" >> /root/.bashrc
 RUN echo "umask 0000" >> /etc/profile
 
-CMD ["/entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
