@@ -75,12 +75,6 @@ RUN apt-get install nginx -y \
 COPY ./docker/nginx/sites.conf /etc/nginx/sites-enabled/default.conf
 COPY ./docker/nginx/error.html /var/www/html/error.html
 
-# Node.js
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* && \
-    curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
-    apt-get install -y nodejs nano git
-
-
 # Copia e dá permissão ao entrypoint como root
 COPY ./docker/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
