@@ -102,6 +102,7 @@ docker-compose exec app php artisan migrate:fresh --seed
 ## Estrutura do projeto (visão rápida)
 
 - `app/` — Modelos, Controladores, Providers
+- `app/Domain` — Entidades
 - `bootstrap/` — Inicialização do framework
 - `config/` — Arquivos de configuração
 - `database/` — Migrations, seeders e factories
