@@ -29,13 +29,13 @@ RUN apt-get update && apt-get install -y \
     sqlite3 \
     libsqlite3-dev 
 
-RUN docker-php-ext-install pdo session xml
+RUN docker-php-ext-install pdo pdo_pgsql pdo_mysql session xml
 
 # habilita instalação do Redis
 RUN pecl install redis-${REDIS_LIB_VERSION} \
     && docker-php-ext-enable redis 
 
-RUN docker-php-ext-install bcmath zip iconv simplexml pcntl gd fileinfo pdo pdo_mysql
+RUN docker-php-ext-install bcmath zip iconv simplexml pcntl gd fileinfo
 
 # habilita instalação do xdebug
 RUN pecl install xdebug \
